@@ -14,17 +14,41 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
             <a class="nav-link" style="color: white;" href="{% url 'classroom-create' %}">New Classroom</a>
           </li>
         </ul>
+        <span class="navbar-text">
+        {% if request.user.is_authenticated %}
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" style="color: white;">{{request.user.username}}</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" style="color: white;" href="{% url 'signout' %}">Sign out</a>
+          </li>
+        </ul>
+        {% else %}
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" style="color: white;" href="{% url 'signin' %}">Sign in</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" style="color: white;" href="{% url 'signup' %}">Sign up</a>
+          </li>
+        </ul>
+        {% endif %}
+      </span>
+
       </div>
     </nav>
     {% if messages %}
       <div class="alert alert" style="background-color: #e3f2fd;" role="alert">
         {% for message in messages %}
-          <div {% if message.tags %} class="{{ alert.tags }}" {% endif %}>{{ message }}</div>
+          <div {% if message.tags %} class="{{ alert.tags }}" {% endif %}>{{ message }}<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button></div>
         {% endfor %}
       </div>
       <br>
