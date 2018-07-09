@@ -106,15 +106,16 @@ def classroom_delete(request, classroom_id):
 def student_create(request, classroom_id):
 	form = StudentForm()
 	classroom = Classroom.objects.get(id=classroom_id)
-	if request.method == "POST":
-		form = StudentForm(request.POST)
-		if form.is_valid():
-			student = form.save(commit=False)
-			student.classroom = classroom
-			student.save()
-			messages.success(request, "Student Successfully Added!")
-			return redirect(classroom.get_absolute_url())
-		print (form.errors)
+	if request.user == classroom.teacher:
+		if request.method == "POST":
+			form = StudentForm(request.POST)
+			if form.is_valid():
+				student = form.save(commit=False)
+				student.classroom = classroom
+				student.save()
+				messages.success(request, "Student Successfully Added!")
+				return redirect(classroom.get_absolute_url())
+			print (form.errors)
 	context = {
 	"form": form,
 	"classroom": classroom,
@@ -124,14 +125,15 @@ def student_create(request, classroom_id):
 def student_update(request, classroom_id, student_id):
 	student = Student.objects.get(id=student_id)
 	classroom = Classroom.objects.get(id=classroom_id)
-	form = StudentForm(instance=student)
-	if request.method == "POST":
-		form = StudentForm(request.POST, instance=student)
-		if form.is_valid():
-			form.save()
-			messages.success(request, "Student Successfully Edited!")
-			return redirect(classroom.get_absolute_url())
-		print (form.errors)
+	if request.user == classroom.teacher:
+		form = StudentForm(instance=student)
+		if request.method == "POST":
+			form = StudentForm(request.POST, instance=student)
+			if form.is_valid():
+				form.save()
+				messages.success(request, "Student Successfully Edited!")
+				return redirect(classroom.get_absolute_url())
+			print (form.errors)
 	context = {
 	"form": form,
 	"student": student,
@@ -141,11 +143,8 @@ def student_update(request, classroom_id, student_id):
 
 
 def student_delete(request, classroom_id, student_id):
-	Student.objects.get(id=student_id).delete()
 	classroom = Classroom.objects.get(id=classroom_id)
-	messages.success(request, "Student Successfully Deleted!")
-	return redirect(classroom.get_absolute_url())
-
-
-
-
+	if request.user == classroom.teacher:
+		Student.objects.get(id=student_id).delete()
+		messages.success(request, "Student Successfully Deleted!")
+		return redirect(classroom.get_absolute_url())

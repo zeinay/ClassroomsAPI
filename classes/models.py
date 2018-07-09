@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Classroom(models.Model):
 	subject = models.CharField(max_length=120)
 	grade = models.IntegerField()
-	year = models.IntegerField()
+	year = models.CharField(max_length=40)
 	teacher = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
 
 	def __str__(self):
