@@ -76,21 +76,22 @@ def classroom_create(request):
 			return redirect('classroom-list')
 		print (form.errors)
 	context = {
-	"form": form,
+		"form": form,
 	}
 	return render(request, 'create_classroom.html', context)
 
 
 def classroom_update(request, classroom_id):
 	classroom = Classroom.objects.get(id=classroom_id)
-	form = ClassroomForm(instance=classroom)
-	if request.method == "POST":
-		form = ClassroomForm(request.POST, instance=classroom)
-		if form.is_valid():
-			form.save()
-			messages.success(request, "Successfully Edited!")
-			return redirect('classroom-list')
-		print (form.errors)
+	if request.user == classroom.teacher:
+		form = ClassroomForm(instance=classroom)
+		if request.method == "POST":
+			form = ClassroomForm(request.POST, instance=classroom)
+			if form.is_valid():
+				form.save()
+				messages.success(request, "Successfully Edited!")
+				return redirect('classroom-list')
+			print (form.errors)
 	context = {
 	"form": form,
 	"classroom": classroom,
@@ -100,8 +101,9 @@ def classroom_update(request, classroom_id):
 
 def classroom_delete(request, classroom_id):
 	Classroom.objects.get(id=classroom_id).delete()
-	messages.success(request, "Successfully Deleted!")
-	return redirect('classroom-list')
+	if request.user == classroom.teacher:
+		messages.success(request, "Successfully Deleted!")
+		return redirect('classroom-list')
 
 def student_create(request, classroom_id):
 	form = StudentForm()

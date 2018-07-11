@@ -16,52 +16,49 @@
   </div>
 </div>
   <br>
-    <div>
-      {% if request.user == classroom.teacher %}
-        <a href="{% url 'student-create' classroom.id %}" class="btn btn-lg btn-block" style="background-color: #e3f2fd; color: #000034;">New Student</a>
-      {% endif %}
-    </div>
-  <br>
-<div>
-  <table class="table">
-  <thead class="thead" style="background-color: #e3f2fd; color: 000034;">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Gender</th>
-      <th scope="col">Date of Birth</th>
-      <th scope="col">Grade</th>
-      {% if request.user == classroom.teacher %}
-      <th scope="col">Update</th>
-      <th scope="col">Delete</th>
-      {% endif %}
-    </tr>
-  </thead>
-  <tbody>
-    {% for student in students %}
-      <tr>
-        <th scope="row">{{ forloop.counter }}</th>
-        <td>{{student.name}}</td>
-        <td>{{student.gender}}</td> 
-        <td>{{student.dob}}</td>
-        <td>{{student.exam_grade}}/100</td>
+      <div>
         {% if request.user == classroom.teacher %}
-        <td>
-            <a href="{% url 'student-update' classroom.id student.id %}" class="btn" style="background-color: #000034; color: white;">Update</a>
-        </td>
-        <td>
-            <a href="{% url 'student-delete' classroom.id student.id %}" class="btn" style="background-color: #FFA500; color: #000034;">Delete</a>
-        </td>
+          <a href="{% url 'student-create' classroom.id %}" class="btn btn-lg btn-block" style="background-color: #e3f2fd; color: #000034;">New Student</a>
         {% endif %}
+      </div>
+    <br>
+  <div>
+    <table class="table">
+    <thead class="thead" style="background-color: #e3f2fd; color: 000034;">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Date of Birth</th>
+        <th scope="col">Grade</th>
+        {% if request.user == classroom.teacher %}
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{student.name}}</td>
+          <td>{{student.gender}}</td> 
+          <td>{{student.dob}}</td>
+          <td>{{student.exam_grade}}/100</td>
+          {% if request.user == classroom.teacher %}
+          <td>
+              <a href="{% url 'student-update' classroom.id student.id %}" class="btn" style="background-color: #000034; color: white;">Update</a>
+          </td>
+          <td>
+              <a href="{% url 'student-delete' classroom.id student.id %}" class="btn" style="background-color: #FFA500; color: #000034;">Delete</a>
+          </td>
+          {% endif %}
 
-  </tr>
-  {% endfor %}
-  </tbody>
+    </tr>
+    {% endfor %}
+    </tbody>
 </table>
-  <table style="width:100%">
-  
 
-</table>  
 </div>
 
 
